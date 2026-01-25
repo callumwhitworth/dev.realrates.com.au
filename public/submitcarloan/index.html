@@ -271,6 +271,11 @@
     housing.addEventListener("change", syncHousing);
     syncHousing();
 
+    <label>
+  Evidence PDF (optional)
+  <input name="evidencePdf" type="file" accept="application/pdf" />
+</label>
+
     // SUBMIT LOGIC (bottom)
     document.getElementById("loanForm").addEventListener("submit", async (e) => {
       e.preventDefault(); // critical
