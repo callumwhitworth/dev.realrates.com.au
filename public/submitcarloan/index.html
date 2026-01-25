@@ -1,7 +1,7 @@
-<form id="loanForm" onsubmit="return false;">
+<form id="loanForm">
   <label>
     Loan amount:
-    <select name="loanAmountBand">
+    <select name="loanAmountBand" required>
       <option value="10000-15000">$10k–15k</option>
       <option value="15000-20000">$15k–20k</option>
     </select>
@@ -22,22 +22,35 @@
 
 <script>
 document.getElementById("loanForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+  e.preventDefault(); // critical
 
   const form = e.target;
 
   const payload = {
     loanAmountBand: form.loanAmountBand.value,
     lender: form.lender.value,
-    interestRate: parseFloat(form.interestRate.value)
+    interestRate: Number(form.interestRate.value)
   };
 
-  const res = await fetch("/api/submit-car-loan", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
+  try {
+    const res = await fetch("/api/submit-car-loan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
 
-  alert(res.ok ? "Submitted!" : "Error submitting");
+    if (!res.ok) {
+      const text = await res.text();
+      alert("Submit failed: " + text);
+      return;
+    }
+
+    alert("Submitted successfully");
+    form.reset();
+
+  } catch (err) {
+    alert("Network error");
+    console.error(err);
+  }
 });
 </script>
