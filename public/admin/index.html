@@ -3,19 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="robots" content="noindex,nofollow" />
-  <title>Admin – Unverified Car Loans</title>
+  <title>Admin – Car Loans</title>
   <style>
     body { font-family: system-ui, Arial; margin: 24px; }
     table { border-collapse: collapse; width: 100%; margin-top: 12px; }
     th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
     th { background: #f6f6f6; }
-    .row { display:flex; gap:10px; align-items:center; margin-bottom:12px; }
+    .row { display:flex; gap:10px; align-items:center; margin-bottom:12px; flex-wrap: wrap; }
     button { padding: 8px 12px; cursor: pointer; }
     .muted { color:#666; font-size: 12px; }
+    .section { margin-top: 22px; padding-top: 18px; border-top: 1px solid #eee; }
   </style>
 </head>
 <body>
-  <h1>Admin – Pending Car Loan Submissions</h1>
+  <h1>Admin – Car Loans</h1>
 
   <div class="row">
     <button id="setKeyBtn">Set admin key</button>
@@ -23,6 +24,8 @@
     <button id="approveBtn">Approve selected</button>
     <span id="status" class="muted"></span>
   </div>
+
+  <h2>Pending approvals</h2>
 
   <table>
     <thead>
@@ -39,8 +42,29 @@
     <tbody id="rows"></tbody>
   </table>
 
+  <div class="section">
+    <h2>Recently approved (production car_loans)</h2>
+    <div class="muted">This is your visual queue that the approval copy finished.</div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Prod ID</th>
+          <th>Source unverified ID</th>
+          <th>Amount band</th>
+          <th>Lender</th>
+          <th>Rate (%)</th>
+          <th>Verified</th>
+        </tr>
+      </thead>
+      <tbody id="approvedRows"></tbody>
+    </table>
+  </div>
+
 <script>
   const KEY_STORAGE = "RR_ADMIN_KEY";
+
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
   function getKey() {
     return sessionStorage.getItem(KEY_STORAGE) || "";
@@ -71,16 +95,18 @@
     return fetch(url, Object.assign({}, opts, { headers }));
   }
 
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[m]));
+  }
+
   async function loadPending() {
-    setStatus("Loading...");
     const tbody = document.getElementById("rows");
     tbody.innerHTML = "";
 
     const res = await apiFetch("/api/admin/unverifiedcarloan?status=pending");
-    if (!res.ok) {
-      const t = await res.text();
-      throw new Error(`Load failed (${res.status}): ${t}`);
-    }
+    if (!res.ok) throw new Error(`Load pending failed (${res.status}): ${await res.text()}`);
     const data = await res.json();
 
     for (const r of (data.rows || [])) {
@@ -97,13 +123,31 @@
       tbody.appendChild(tr);
     }
 
-    setStatus(`Loaded ${data.rows?.length || 0} pending rows.`);
+    return data.rows?.length || 0;
   }
 
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, m => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-    }[m]));
+  async function loadApproved() {
+    const tbody = document.getElementById("approvedRows");
+    tbody.innerHTML = "";
+
+    const res = await apiFetch("/api/admin/carloans?limit=20");
+    if (!res.ok) throw new Error(`Load approved failed (${res.status}): ${await res.text()}`);
+    const data = await res.json();
+
+    for (const r of (data.rows || [])) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${r.id}</td>
+        <td>${r.source_unverified_id}</td>
+        <td>${r.loan_amount_band}</td>
+        <td>${escapeHtml(r.lender)}</td>
+        <td>${r.interest_rate}</td>
+        <td>${r.verified_at}</td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    return data.rows?.length || 0;
   }
 
   function selectedIds() {
@@ -114,11 +158,7 @@
 
   async function approveSelected() {
     const ids = selectedIds();
-    if (ids.length === 0) {
-      setStatus("Nothing selected.");
-      return;
-    }
-
+    if (ids.length === 0) { setStatus("Nothing selected."); return; }
     if (!confirm(`Approve ${ids.length} submissions?`)) return;
 
     setStatus("Approving...");
@@ -128,29 +168,33 @@
       body: JSON.stringify({ ids, approvedBy: "callum" })
     });
 
-    if (!res.ok) {
-      const t = await res.text();
-      throw new Error(`Approve failed (${res.status}): ${t}`);
-    }
+    if (!res.ok) throw new Error(`Approve failed (${res.status}): ${await res.text()}`);
 
-    setStatus("Approved. Refreshing list...");
-    await loadPending();
+    setStatus("Approved. Waiting 1s then refreshing...");
+    await sleep(1000);
+
+    const [pendingCount, approvedCount] = await Promise.all([loadPending(), loadApproved()]);
+    setStatus(`Pending: ${pendingCount} | Recent approved: ${approvedCount}`);
   }
 
-  // Wire buttons
+  async function refreshAll() {
+    setStatus("Refreshing...");
+    const [pendingCount, approvedCount] = await Promise.all([loadPending(), loadApproved()]);
+    setStatus(`Pending: ${pendingCount} | Recent approved: ${approvedCount}`);
+  }
+
   document.getElementById("setKeyBtn").addEventListener("click", setKey);
-  document.getElementById("refreshBtn").addEventListener("click", loadPending);
+  document.getElementById("refreshBtn").addEventListener("click", refreshAll);
   document.getElementById("approveBtn").addEventListener("click", approveSelected);
 
   document.getElementById("selectAll").addEventListener("change", (e) => {
     document.querySelectorAll(".rowCheck").forEach(cb => cb.checked = e.target.checked);
   });
 
-  // Auto load (will prompt for key if missing)
   (async () => {
     try {
       if (!getKey()) setKey();
-      await loadPending();
+      await refreshAll();
     } catch (err) {
       console.error(err);
       setStatus(err.message || "Error");
