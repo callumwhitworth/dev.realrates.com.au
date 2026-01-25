@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin — Car Loan Verification</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 20px; }
+    h1 { margin: 0 0 12px; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+    input, button, select { padding: 8px 10px; font-size: 14px; }
+    button { cursor: pointer; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    th, td { border: 1px solid #ddd; padding: 8px; font-size: 14px; }
+    th { background: #f6f6f6; text-align: left; }
+    tr:hover { background: #fafafa; }
+    .muted { color: #666; font-size: 13px; }
+    .ok { color: #0a7a0a; }
+    .bad { color: #b00020; }
+    .right { margin-left: auto; }
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; background: #eee; font-size: 12px; }
+    .controls { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  </style>
+</head>
+<body>
+  <h1>Admin — Car Loan Verification</h1>
+  <div class="muted">Loads pending submissions from <code>/api/admin/unverifiedcarloan</code> and approves via <code>/api/admin/approvecarloan</code>.</div>
+
+  <div class="row">
+    <div class="controls">
+      <label>Admin key:
+        <input id="adminKey" type="password" placeholder="Paste ADMIN_KEY" />
+      </label>
+
+      <label>Status:
+        <select id="status">
+          <option value="pending" selected>pending</option>
+          <option value="approved">approved</option>
+          <option value="rejected">rejected</option>
+        </select>
+      </label>
+
+      <button id="loadBtn">Load</button>
+      <button id="selectAllBtn">Select all</button>
+      <button id="clearSelBtn">Clear selection</button>
+
+      <span class="right"></span>
+
+      <label>Approved by:
+        <input id="approvedBy" type="text" value="admin" />
+      </label>
+
+      <button id="approveBtn">Approve selected</button>
+    </div>
+  </div>
+
+  <div id="msg" class="muted"></div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:40px;"></th>
+        <th>ID</th>
+        <th>Loan amount band</th>
+        <th>Lender</th>
+        <th>Interest rate</th>
+        <th>Submitted at</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="tbody">
+      <tr><td colspan="7" class="muted">No data loaded.</td></tr>
+    </tbody>
+  </table>
+
+<script>
+  const adminKeyEl = document.getElementById("adminKey");
+  const statusEl = document.getElementById("status");
+  const approvedByEl = document.getElementById("approvedBy");
+  const msgEl = document.getElementById("msg");
+  const tbody = document.getElementById("tbody");
+
+  const loadBtn = document.getElementById("loadBtn");
+  const approveBtn = document.getElementById("approve
