@@ -1,8 +1,43 @@
-<!doctype html>
-<html>
-  <head><title>Dev RealRates</title></head>
-  <body>
-    <h1>Dev RealRates</h1>
-    <p>Placeholder — real content goes here later.</p>
-  </body>
-</html>
+<form id="loanForm">
+  <label>
+    Loan amount:
+    <select name="loanAmountBand">
+      <option value="10000-15000">$10k–15k</option>
+      <option value="15000-20000">$15k–20k</option>
+    </select>
+  </label>
+
+  <label>
+    Lender:
+    <input name="lender" required />
+  </label>
+
+  <label>
+    Interest rate (%):
+    <input name="interestRate" type="number" step="0.01" required />
+  </label>
+
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+document.getElementById("loanForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const form = e.target;
+
+  const payload = {
+    loanAmountBand: form.loanAmountBand.value,
+    lender: form.lender.value,
+    interestRate: parseFloat(form.interestRate.value)
+  };
+
+  const res = await fetch("/api/submit-car-loan", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  alert(res.ok ? "Submitted!" : "Error submitting");
+});
+</script>
