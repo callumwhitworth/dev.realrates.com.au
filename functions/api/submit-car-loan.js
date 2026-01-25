@@ -1,7 +1,12 @@
-export async function onRequestPost(context) {
+export async function onRequest(context) {
   const { request, env } = context;
 
-  // Basic content-type guard
+  // Only allow POST
+  if (request.method !== "POST") {
+    return new Response("Method Not Allowed", { status: 405 });
+  }
+
+  // Content-Type guard
   const contentType = request.headers.get("content-type") || "";
   if (!contentType.includes("application/json")) {
     return new Response("Expected application/json", { status: 415 });
@@ -18,7 +23,7 @@ export async function onRequestPost(context) {
   const lender = String(body.lender || "").trim();
   const interestRate = Number(body.interestRate);
 
-  // Hard validation (keep it blunt)
+  // Validation
   const allowedBands = new Set(["10000-15000", "15000-20000", "20000-30000"]);
   if (!allowedBands.has(loanAmountBand)) {
     return new Response("Invalid loanAmountBand", { status: 400 });
@@ -28,24 +33,27 @@ export async function onRequestPost(context) {
     return new Response("Invalid lender", { status: 400 });
   }
 
-  // interestRate is in percent (e.g. 12.49)
   if (!Number.isFinite(interestRate) || interestRate <= 0 || interestRate >= 50) {
     return new Response("Invalid interestRate", { status: 400 });
   }
 
-  // Insert into your unverified table
-  const stmt = env.DB.prepare(`
-    INSERT INTO unverified_car_loans (loan_amount_band, lender, interest_rate)
-    VALUES (?, ?, ?)
-  `);
+  // Insert into unverified table
+  const result = await env.DB
+    .prepare(`
+      INSERT INTO unverified_car_loans
+      (loan_amount_band, lender, interest_rate)
+      VALUES (?, ?, ?)
+    `)
+    .bind(loanAmountBand, lender, interestRate)
+    .run();
 
-  const result = await stmt.bind(loanAmountBand, lender, interestRate).run();
-
-  // Return inserted row id (useful for debugging; don’t show in UI later)
-  return new Response(JSON.stringify({ ok: true, id: result.meta.last_row_id }), {
-    headers: {
-      "content-type": "application/json",
-      "cache-control": "no-store"
+  return new Response(
+    JSON.stringify({ ok: true, id: result.meta.last_row_id }),
+    {
+      headers: {
+        "content-type": "application/json",
+        "cache-control": "no-store"
+      }
     }
-  });
+  );
 }
