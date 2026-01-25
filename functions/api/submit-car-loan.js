@@ -24,10 +24,13 @@ export async function onRequest(context) {
   const interestRate = Number(body.interestRate);
 
   // Validation
-  const allowedBands = new Set(["10000-15000", "15000-20000", "20000-30000"]);
-  if (!allowedBands.has(loanAmountBand)) {
-    return new Response("Invalid loanAmountBand", { status: 400 });
-  }
+  const allowedLoanAmountBands = new Set([
+  "lt_5000","5000-9999","10000-14999","15000-19999","20000-29999","30000-39999","40000-49999","50000_plus"
+]);
+if (!allowedLoanAmountBands.has(loanAmountBand)) {
+  return new Response("Invalid loanAmountBand", { status: 400 });
+}
+
 
   if (!lender || lender.length < 2 || lender.length > 60) {
     return new Response("Invalid lender", { status: 400 });
