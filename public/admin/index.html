@@ -1,84 +1,161 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin — Car Loan Verification</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Admin – Unverified Car Loans</title>
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 20px; }
-    h1 { margin: 0 0 12px; }
-    .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
-    input, button, select { padding: 8px 10px; font-size: 14px; }
-    button { cursor: pointer; }
-    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-    th, td { border: 1px solid #ddd; padding: 8px; font-size: 14px; }
-    th { background: #f6f6f6; text-align: left; }
-    tr:hover { background: #fafafa; }
-    .muted { color: #666; font-size: 13px; }
-    .ok { color: #0a7a0a; }
-    .bad { color: #b00020; }
-    .right { margin-left: auto; }
-    .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; background: #eee; font-size: 12px; }
-    .controls { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    body { font-family: system-ui, Arial; margin: 24px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 12px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background: #f6f6f6; }
+    .row { display:flex; gap:10px; align-items:center; margin-bottom:12px; }
+    button { padding: 8px 12px; cursor: pointer; }
+    .muted { color:#666; font-size: 12px; }
   </style>
 </head>
 <body>
-  <h1>Admin — Car Loan Verification</h1>
-  <div class="muted">Loads pending submissions from <code>/api/admin/unverifiedcarloan</code> and approves via <code>/api/admin/approvecarloan</code>.</div>
+  <h1>Admin – Pending Car Loan Submissions</h1>
 
   <div class="row">
-    <div class="controls">
-      <label>Admin key:
-        <input id="adminKey" type="password" placeholder="Paste ADMIN_KEY" />
-      </label>
-
-      <label>Status:
-        <select id="status">
-          <option value="pending" selected>pending</option>
-          <option value="approved">approved</option>
-          <option value="rejected">rejected</option>
-        </select>
-      </label>
-
-      <button id="loadBtn">Load</button>
-      <button id="selectAllBtn">Select all</button>
-      <button id="clearSelBtn">Clear selection</button>
-
-      <span class="right"></span>
-
-      <label>Approved by:
-        <input id="approvedBy" type="text" value="admin" />
-      </label>
-
-      <button id="approveBtn">Approve selected</button>
-    </div>
+    <button id="setKeyBtn">Set admin key</button>
+    <button id="refreshBtn">Refresh</button>
+    <button id="approveBtn">Approve selected</button>
+    <span id="status" class="muted"></span>
   </div>
-
-  <div id="msg" class="muted"></div>
 
   <table>
     <thead>
       <tr>
-        <th style="width:40px;"></th>
+        <th><input type="checkbox" id="selectAll" /></th>
         <th>ID</th>
-        <th>Loan amount band</th>
+        <th>Amount band</th>
         <th>Lender</th>
-        <th>Interest rate</th>
-        <th>Submitted at</th>
+        <th>Rate (%)</th>
+        <th>Submitted</th>
         <th>Status</th>
       </tr>
     </thead>
-    <tbody id="tbody">
-      <tr><td colspan="7" class="muted">No data loaded.</td></tr>
-    </tbody>
+    <tbody id="rows"></tbody>
   </table>
 
 <script>
-  const adminKeyEl = document.getElementById("adminKey");
-  const statusEl = document.getElementById("status");
-  const approvedByEl = document.getElementById("approvedBy");
-  const msgEl = document.getElementById("msg");
-  const tbody = document.getElementById("tbody");
+  const KEY_STORAGE = "RR_ADMIN_KEY";
 
-  const loadBtn = document.getElementById("loadBtn");
-  const approveBtn = document.getElementById("approve
+  function getKey() {
+    return sessionStorage.getItem(KEY_STORAGE) || "";
+  }
+
+  function setKey() {
+    const k = prompt("Paste ADMIN_KEY (stored for this tab session only):", getKey());
+    if (k && k.trim().length > 5) {
+      sessionStorage.setItem(KEY_STORAGE, k.trim());
+      setStatus("Admin key set for this session.");
+    } else {
+      setStatus("No key set.");
+    }
+  }
+
+  function setStatus(msg) {
+    document.getElementById("status").textContent = msg || "";
+  }
+
+  async function apiFetch(url, opts = {}) {
+    const key = getKey();
+    if (!key) throw new Error("No admin key set. Click 'Set admin key'.");
+
+    const headers = Object.assign({}, opts.headers || {}, {
+      "x-admin-key": key
+    });
+
+    return fetch(url, Object.assign({}, opts, { headers }));
+  }
+
+  async function loadPending() {
+    setStatus("Loading...");
+    const tbody = document.getElementById("rows");
+    tbody.innerHTML = "";
+
+    const res = await apiFetch("/api/admin/unverifiedcarloan?status=pending");
+    if (!res.ok) {
+      const t = await res.text();
+      throw new Error(`Load failed (${res.status}): ${t}`);
+    }
+    const data = await res.json();
+
+    for (const r of (data.rows || [])) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><input type="checkbox" class="rowCheck" data-id="${r.id}"></td>
+        <td>${r.id}</td>
+        <td>${r.loan_amount_band}</td>
+        <td>${escapeHtml(r.lender)}</td>
+        <td>${r.interest_rate}</td>
+        <td>${r.submitted_at}</td>
+        <td>${r.status}</td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    setStatus(`Loaded ${data.rows?.length || 0} pending rows.`);
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[m]));
+  }
+
+  function selectedIds() {
+    return Array.from(document.querySelectorAll(".rowCheck:checked"))
+      .map(x => Number(x.dataset.id))
+      .filter(n => Number.isInteger(n) && n > 0);
+  }
+
+  async function approveSelected() {
+    const ids = selectedIds();
+    if (ids.length === 0) {
+      setStatus("Nothing selected.");
+      return;
+    }
+
+    if (!confirm(`Approve ${ids.length} submissions?`)) return;
+
+    setStatus("Approving...");
+    const res = await apiFetch("/api/admin/approvecarloan", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ ids, approvedBy: "callum" })
+    });
+
+    if (!res.ok) {
+      const t = await res.text();
+      throw new Error(`Approve failed (${res.status}): ${t}`);
+    }
+
+    setStatus("Approved. Refreshing list...");
+    await loadPending();
+  }
+
+  // Wire buttons
+  document.getElementById("setKeyBtn").addEventListener("click", setKey);
+  document.getElementById("refreshBtn").addEventListener("click", loadPending);
+  document.getElementById("approveBtn").addEventListener("click", approveSelected);
+
+  document.getElementById("selectAll").addEventListener("change", (e) => {
+    document.querySelectorAll(".rowCheck").forEach(cb => cb.checked = e.target.checked);
+  });
+
+  // Auto load (will prompt for key if missing)
+  (async () => {
+    try {
+      if (!getKey()) setKey();
+      await loadPending();
+    } catch (err) {
+      console.error(err);
+      setStatus(err.message || "Error");
+    }
+  })();
+</script>
+</body>
+</html>
