@@ -1,3 +1,4 @@
+console.log("DB binding exists:", !!env.DB);
 export async function onRequestPost({ request, env }) {
   try {
     // 1️⃣ Parse raw input
@@ -15,24 +16,29 @@ export async function onRequestPost({ request, env }) {
     const sessionId = crypto.randomUUID();
 
     // 3️⃣ Insert RAW search data (no scoring)
-    await env.DB.prepare(`
-      INSERT INTO customer_search_car_loan (
-        session_id,
-        expires_at,
-        payment_status,
-        search_input_json
-      ) VALUES (
-        ?,
-        DATETIME('now', '+30 days'),
-        'unpaid',
-        ?
-      )
-    `)
-      .bind(
-        sessionId,
-        JSON.stringify(input)
-      )
-      .run();
+await env.DB.prepare(`
+  INSERT INTO customer_search_car_loan (
+    session_id,
+    expires_at,
+    payment_status,
+    search_input_json,
+    search_score_json,
+    scoring_model_version
+  ) VALUES (
+    ?,
+    DATETIME('now', '+30 days'),
+    'unpaid',
+    ?,
+    '{}',
+    'pending'
+  )
+`)
+.bind(
+  sessionId,
+  JSON.stringify(input)
+)
+.run();
+
 
     // 4️⃣ Respond with reference ID (important for next steps)
     return new Response(
