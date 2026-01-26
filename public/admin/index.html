@@ -1,20 +1,27 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="robots" content="noindex,nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>Admin – Car Loan Submissions</title>
 
   <style>
+    /* ===== Base layout ===== */
     body {
-      font-family: system-ui, Arial, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   Roboto, Helvetica, Arial, sans-serif;
       margin: 20px;
+      color: #111;
     }
 
     h1 {
-      margin-bottom: 8px;
+      margin: 0 0 8px 0;
+      font-size: 20px;
     }
 
+    /* ===== Controls ===== */
     .controls {
       display: flex;
       gap: 10px;
@@ -26,6 +33,7 @@
     button {
       padding: 8px 12px;
       cursor: pointer;
+      font-size: 13px;
     }
 
     .status {
@@ -33,6 +41,7 @@
       color: #555;
     }
 
+    /* ===== Table ===== */
     .table-wrap {
       overflow-x: auto;
       border: 1px solid #ddd;
@@ -43,14 +52,17 @@
       border-collapse: collapse;
       min-width: 1800px; /* force horizontal scroll */
       width: 100%;
+      background: #fff;
     }
 
-    th, td {
+    th,
+    td {
       border: 1px solid #ddd;
       padding: 6px 8px;
       font-size: 12px;
       white-space: nowrap;
       text-align: left;
+      vertical-align: middle;
     }
 
     th {
@@ -58,6 +70,7 @@
       position: sticky;
       top: 0;
       z-index: 1;
+      font-weight: 600;
     }
 
     a {
@@ -69,27 +82,26 @@
     .muted {
       color: #888;
     }
-    
+
+    /* ===== Admin focus mode ===== */
+    tr.dimmed {
+      display: none;
+    }
+
+    tr.focused {
+      background-color: #fffbe6; /* soft highlight */
+    }
+
+    #evidencePanel {
+      padding-top: 8px;
+      border-top: 2px solid #eee;
+      margin-top: 12px;
+    }
   </style>
 </head>
+
 <body>
-/* ===== Admin focus mode ===== */
 
-/* Hide non-selected rows when a row is focused */
-tr.dimmed {
-  display: none;
-}
-
-/* Optional: visually emphasize the focused row */
-tr.focused {
-  background-color: #fffbe6; /* soft highlight */
-}
-
-/* Make the evidence panel feel intentional */
-#evidencePanel {
-  padding-top: 8px;
-  border-top: 2px solid #eee;
-}
 
 <h1>Admin – Car Loan Submissions</h1>
 
