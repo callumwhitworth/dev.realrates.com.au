@@ -1,7 +1,7 @@
 export async function onRequest(context) {
   const { request, env } = context;
 
-  // Admin guard
+  // Admin auth
   const key = request.headers.get("x-admin-key");
   if (!key || key !== env.ADMIN_KEY) {
     return new Response("Unauthorized", { status: 401 });
@@ -14,13 +14,23 @@ export async function onRequest(context) {
     return new Response("Missing key", { status: 400 });
   }
 
-  // Create a signed URL valid for 5 minutes
-  const signedUrl = await env.EVIDENCE.createPresignedUrl(objectKey, {
-    expiresIn: 60 * 5 // 5 minutes
-  });
+  let obj;
+  try {
+    obj = await env.EVIDENCE.get(objectKey);
+  } catch (err) {
+    console.error("R2 get failed:", err);
+    return new Response("Failed to read PDF", { status: 500 });
+  }
 
-  return new Response(
-    JSON.stringify({ ok: true, url: signedUrl }),
-    { headers: { "content-type": "application/json", "cache-control": "no-store" } }
-  );
+  if (!obj) {
+    return new Response("PDF not found", { status: 404 });
+  }
+
+  return new Response(obj.body, {
+    headers: {
+      "Content-Type": "application/pdf",
+      "Content-Disposition": "inline",
+      "Cache-Control": "no-store"
+    }
+  });
 }
