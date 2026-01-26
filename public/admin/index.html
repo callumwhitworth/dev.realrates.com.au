@@ -278,25 +278,42 @@ function wireRowSelection() {
   const checkboxes = document.querySelectorAll(".rowCheck");
 
   checkboxes.forEach(cb => {
-    // remove any existing handler to avoid stacking listeners
     cb.onchange = null;
 
     cb.onchange = () => {
-      // enforce single-select
+      const row = cb.closest("tr");
+
+      // single-select
       checkboxes.forEach(other => {
-        if (other !== cb) other.checked = false;
+        if (other !== cb) {
+          other.checked = false;
+          other.closest("tr").classList.remove("dimmed");
+        }
       });
 
-      // show / hide evidence
-      const evidenceKey =
-        cb.checked && cb.dataset.evidence
-          ? cb.dataset.evidence
-          : null;
+      if (cb.checked) {
+        // hide all other rows
+        checkboxes.forEach(other => {
+          if (other !== cb) {
+            other.closest("tr").classList.add("dimmed");
+          }
+        });
 
-      showEvidenceForRow(evidenceKey);
+        const evidenceKey = cb.dataset.evidence || null;
+        showEvidenceForRow(evidenceKey);
+
+      } else {
+        // restore all rows
+        checkboxes.forEach(other => {
+          other.closest("tr").classList.remove("dimmed");
+        });
+
+        showEvidenceForRow(null);
+      }
     };
   });
 }
+
 
 
   function selectedIds() {
