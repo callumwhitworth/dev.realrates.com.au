@@ -16,14 +16,32 @@ export async function onRequest(context) {
   }
 
   const result = await env.DB.prepare(`
-    SELECT id, loan_amount_band, lender, interest_rate, submitted_at, status
+    SELECT
+      id,
+      loan_amount_band,
+      lender,
+      interest_rate,
+      submitted_at,
+      status,
+
+      -- evidence metadata
+      evidence_pdf_key,
+      evidence_pdf_uploaded_at,
+      evidence_pdf_size
+
     FROM unverified_car_loans
     WHERE status = ?
     ORDER BY submitted_at DESC
     LIMIT 200
   `).bind(status).all();
 
-  return new Response(JSON.stringify({ ok: true, rows: result.results }), {
-    headers: { "content-type": "application/json", "cache-control": "no-store" }
-  });
+  return new Response(
+    JSON.stringify({ ok: true, rows: result.results }),
+    {
+      headers: {
+        "content-type": "application/json",
+        "cache-control": "no-store"
+      }
+    }
+  );
 }
