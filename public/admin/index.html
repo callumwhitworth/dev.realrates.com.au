@@ -235,44 +235,48 @@ async function showEvidenceForRow(objectKey) {
     for (const r of (data.rows || [])) {
       const tr = document.createElement("tr");
 
-      tr.innerHTML = `
-        <td><input type="checkbox" class="rowCheck" data-id="${r.id}"></td>
+tr.innerHTML = `
+  <td>
+    <input
+      type="checkbox"
+      class="rowCheck"
+      data-id="${r.id}"
+      data-evidence="${escapeHtml(r.evidence_pdf_key || "")}"
+    >
+  </td>
 
-        <td>${r.id}</td>
-        <td>${r.status}</td>
-        <td>${r.submitted_at}</td>
+  <td>${r.id}</td>
+  <td>${r.status}</td>
+  <td>${r.submitted_at}</td>
 
-        <td>${escapeHtml(r.lender)}</td>
-        <td>${r.interest_rate}</td>
+  <td>${escapeHtml(r.lender)}</td>
+  <td>${r.interest_rate}</td>
 
-        <td>${r.state}</td>
-        <td>${r.application_channel}</td>
+  <td>${r.state}</td>
+  <td>${r.application_channel}</td>
 
-        <td>${r.income_band}</td>
-        <td>${r.employment_status}</td>
-        <td>${r.age_band}</td>
+  <td>${r.income_band}</td>
+  <td>${r.employment_status}</td>
+  <td>${r.age_band}</td>
 
-        <td>${r.housing_status}</td>
-        <td>${r.rent_payment_band || "—"}</td>
-        <td>${r.mortgage_payment_band || "—"}</td>
+  <td>${r.housing_status}</td>
+  <td>${r.rent_payment_band || "—"}</td>
+  <td>${r.mortgage_payment_band || "—"}</td>
 
-        <td>${r.dependents}</td>
-        <td>${r.monthly_debt_repayments_band}</td>
-        <td>${r.liquid_assets_band}</td>
+  <td>${r.dependents}</td>
+  <td>${r.monthly_debt_repayments_band}</td>
+  <td>${r.liquid_assets_band}</td>
 
-        <td>${r.loan_amount_band}</td>
-        <td>${r.loan_purpose}</td>
-        <td>${r.loan_term_months}</td>
-        <td>${r.guarantor}</td>
-        <td>${r.deposit_percent_band}</td>
-        <td>${r.vehicle_age_band}</td>
+  <td>${r.loan_amount_band}</td>
+  <td>${r.loan_purpose}</td>
+  <td>${r.loan_term_months}</td>
+  <td>${r.guarantor}</td>
+  <td>${r.deposit_percent_band}</td>
+  <td>${r.vehicle_age_band}</td>
 
-        <td>
-          ${r.evidence_pdf_key
-            ? `<a data-key="${escapeHtml(r.evidence_pdf_key)}" class="evidenceLink">View PDF</a>`
-            : `<span class="muted">—</span>`}
-        </td>
-      `;
+  <td>${r.evidence_pdf_key ? "Available" : "—"}</td>
+`;
+
 
       tbody.appendChild(tr);
     }
@@ -286,6 +290,22 @@ async function showEvidenceForRow(objectKey) {
 
     setStatus(`Loaded ${data.rows?.length || 0} pending rows`);
   }
+  
+function wireRowSelection() {
+  document.querySelectorAll(".rowCheck").forEach(cb => {
+    cb.addEventListener("change", () => {
+
+      // single-select behaviour
+      document.querySelectorAll(".rowCheck").forEach(other => {
+        if (other !== cb) other.checked = false;
+      });
+
+      const evidenceKey = cb.checked ? cb.dataset.evidence : null;
+      showEvidenceForRow(evidenceKey || null);
+    });
+  });
+}
+
 
   function selectedIds() {
     return Array.from(document.querySelectorAll(".rowCheck:checked"))
