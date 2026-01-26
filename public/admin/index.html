@@ -193,6 +193,36 @@ function openEvidence(objectKey) {
   window.open(url, "_blank", "noopener");
 }
 
+async function showEvidenceForRow(objectKey) {
+  const panel = document.getElementById("evidencePanel");
+  const frame = document.getElementById("evidenceFrame");
+
+  if (!objectKey) {
+    panel.style.display = "none";
+    frame.src = "";
+    return;
+  }
+
+  try {
+    // Step 1: mint token (admin-authenticated)
+    const res = await apiFetch(
+      `/api/admin/evidence?key=${encodeURIComponent(objectKey)}`
+    );
+    if (!res.ok) throw new Error(await res.text());
+
+    const data = await res.json();
+
+    // Step 2: embed tokenised PDF
+    frame.src = `/api/admin/evidence?token=${encodeURIComponent(data.token)}`;
+    panel.style.display = "block";
+
+  } catch (err) {
+    console.error(err);
+    alert("Failed to load PDF evidence");
+    panel.style.display = "none";
+    frame.src = "";
+  }
+}
 
   async function loadPending() {
     const tbody = document.getElementById("rows");
