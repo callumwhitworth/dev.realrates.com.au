@@ -10,73 +10,80 @@ export async function onRequest(context) {
   }
 
   try {
-    // Ensure DB binding exists
     if (!env.DB) {
       return new Response(
-        JSON.stringify({ error: "DB binding missing (env.DB is undefined)" }),
+        JSON.stringify({ error: "DB binding missing" }),
         { status: 500, headers: { "Content-Type": "application/json" } }
       );
     }
 
-    // Parse JSON body safely
-    let input;
-    try {
-      input = await request.json();
-    } catch {
-      return new Response(
-        JSON.stringify({ error: "Invalid JSON body" }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
-      );
-    }
-
-    // Light validation
-    if (!input || typeof input !== "object" || Array.isArray(input) || Object.keys(input).length === 0) {
-      return new Response(
-        JSON.stringify({ error: "Empty search payload" }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
-      );
-    }
+    // Parse input
+    const input = await request.json();
 
     const sessionId = crypto.randomUUID();
 
-    // Option A: store placeholders for score fields (schema requires NOT NULL)
-    const stmt = env.DB.prepare(`
+    // Insert RAW search input (mirrors submit table)
+    await env.DB.prepare(`
       INSERT INTO customer_search_car_loan (
+        state,
+        application_channel,
+        income_band,
+        employment_status,
+        age_band,
+        housing_status,
+        rent_payment_band,
+        mortgage_payment_band,
+        dependents,
+        monthly_debt_repayments_band,
+        liquid_assets_band,
+        loan_amount_band,
+        loan_purpose,
+        loan_term_months,
+        guarantor,
+        deposit_percent_band,
+        vehicle_age_band,
         session_id,
-        expires_at,
-        payment_status,
-        search_input_json,
-        search_score_json,
-        scoring_model_version
+        expires_at
       ) VALUES (
-        ?,
-        DATETIME('now', '+30 days'),
-        'unpaid',
-        ?,
-        '{}',
-        'pending'
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, DATETIME('now','+30 days')
       )
-    `);
-
-    const result = await stmt.bind(sessionId, JSON.stringify(input)).run();
+    `)
+      .bind(
+        input.state,
+        input.applicationChannel,
+        input.incomeBand,
+        input.employmentStatus,
+        input.ageBand || null,
+        input.housingStatus,
+        input.rentPaymentBand || null,
+        input.mortgagePaymentBand || null,
+        input.dependents,
+        input.monthlyDebtRepaymentsBand || null,
+        input.liquidAssetsBand || null,
+        input.loanAmountBand,
+        input.loanPurpose || null,
+        Number(input.loanTermMonths),
+        input.guarantor || null,
+        input.depositPercentBand || null,
+        input.vehicleAgeBand || null,
+        sessionId
+      )
+      .run();
 
     return new Response(
       JSON.stringify({
         ok: true,
-        id: result?.meta?.last_row_id ?? null,
         session_id: sessionId,
-        expires_in_days: 30,
+        expires_in_days: 30
       }),
       { headers: { "Content-Type": "application/json" } }
     );
+
   } catch (err) {
     console.error("search-car-loan error:", err);
 
-    // Return useful error text for debugging (safe enough for internal dev)
     return new Response(
-      JSON.stringify({
-        error: err?.message || "Internal server error",
-      }),
+      JSON.stringify({ error: err.message }),
       { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
