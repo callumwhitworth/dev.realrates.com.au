@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="robots" content="noindex,nofollow" />
@@ -7,23 +7,77 @@
   <title>Search Car Loan Rates – RealRates</title>
 
   <style>
-    body { font-family: system-ui, Arial; margin: 24px; max-width: 720px; }
-    h1 { margin: 0 0 12px; }
-    form { display: flex; flex-direction: column; gap: 14px; }
-    label { display: flex; flex-direction: column; gap: 6px; }
-    select { padding: 10px; font-size: 14px; }
-    .row { display:flex; gap:12px; }
-    .row > label { flex:1; }
-    .muted { color:#666; font-size: 12px; }
-    button { padding: 12px; font-size: 14px; cursor: pointer; }
-    .hidden { display: none; }
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      margin: 24px;
+      max-width: 720px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    select {
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .row > label {
+      flex: 1;
+    }
+
+    .muted {
+      color: #666;
+      font-size: 12px;
+    }
+
+    button {
+      padding: 12px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    button[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .status {
+      margin-top: 10px;
+      font-size: 13px;
+    }
   </style>
 </head>
 
 <body>
   <h1>Search real car loan rates</h1>
+
   <div class="muted">
-    Answer a few questions to see rates people in similar situations actually received.
+    Answer a few questions to see what people in similar situations actually paid.
   </div>
 
   <form id="searchForm">
@@ -55,7 +109,7 @@
     </div>
 
     <label>
-      Income (gross, excl super)
+      Income (gross, excl. super)
       <select name="incomeBand" required>
         <option value="lt_40000">&lt; $40k</option>
         <option value="40000-49999">$40k–49,999</option>
@@ -65,131 +119,4 @@
         <option value="80000-89999">$80k–89,999</option>
         <option value="90000-99999">$90k–99,999</option>
         <option value="100000-109999">$100k–109,999</option>
-        <option value="110000-119999">$110k–119,999</option>
-        <option value="120000-129999">$120k–129,999</option>
-        <option value="130000-149999">$130k–149,999</option>
-        <option value="150000-179999">$150k–179,999</option>
-        <option value="180000-219999">$180k–219,999</option>
-        <option value="220000_plus">$220k+</option>
-      </select>
-    </label>
-
-    <label>
-      Employment status
-      <select name="employmentStatus" required>
-        <option value="ft_1y_plus">Full-time (1+ year)</option>
-        <option value="ft_under_1y">Full-time (&lt; 1 year)</option>
-        <option value="pt">Part-time</option>
-        <option value="casual">Casual</option>
-        <option value="self_employed_1y_plus">Self-employed (1+ year)</option>
-        <option value="self_employed_under_1y">Self-employed (&lt; 1 year)</option>
-        <option value="unemployed">Unemployed</option>
-      </select>
-    </label>
-
-    <label>
-      Housing status
-      <select name="housingStatus" id="housingStatus" required>
-        <option value="owner_mortgage">Owner (mortgage)</option>
-        <option value="owner_outright">Owner (outright)</option>
-        <option value="renting">Renting</option>
-        <option value="living_with_family">Living with family</option>
-        <option value="other">Other</option>
-      </select>
-    </label>
-
-    <label id="rentField" class="hidden">
-      Monthly rent (band)
-      <select name="rentPaymentBand">
-        <option value="lt_1000">&lt; $1,000</option>
-        <option value="1000-1499">$1,000–1,499</option>
-        <option value="1500-1999">$1,500–1,999</option>
-        <option value="2000-2499">$2,000–2,499</option>
-        <option value="2500-2999">$2,500–2,999</option>
-        <option value="3000-3999">$3,000–3,999</option>
-        <option value="4000_plus">$4,000+</option>
-      </select>
-    </label>
-
-    <label id="mortgageField" class="hidden">
-      Monthly mortgage repayment (band)
-      <select name="mortgagePaymentBand">
-        <option value="lt_1000">&lt; $1,000</option>
-        <option value="1000-1499">$1,000–1,499</option>
-        <option value="1500-1999">$1,500–1,999</option>
-        <option value="2000-2499">$2,000–2,499</option>
-        <option value="2500-2999">$2,500–2,999</option>
-        <option value="3000-3999">$3,000–3,999</option>
-        <option value="4000_plus">$4,000+</option>
-      </select>
-    </label>
-
-    <label>
-      Dependents
-      <select name="dependents" required>
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5_plus">5+</option>
-      </select>
-    </label>
-
-    <label>
-      Loan amount
-      <select name="loanAmountBand" required>
-        <option value="lt_5000">&lt; $5,000</option>
-        <option value="5000-9999">$5,000–9,999</option>
-        <option value="10000-14999">$10,000–14,999</option>
-        <option value="15000-19999">$15,000–19,999</option>
-        <option value="20000-29999">$20,000–29,999</option>
-        <option value="30000-39999">$30,000–39,999</option>
-        <option value="40000-49999">$40,000–49,999</option>
-        <option value="50000_plus">$50,000+</option>
-      </select>
-    </label>
-
-    <label>
-      Loan term (months)
-      <select name="loanTermMonths" required>
-        <option value="12">12</option>
-        <option value="24">24</option>
-        <option value="36">36</option>
-        <option value="48">48</option>
-        <option value="60">60</option>
-        <option value="72">72</option>
-        <option value="84">84</option>
-      </select>
-    </label>
-
-    <button type="submit">Search real rates</button>
-  </form>
-
-  <script>
-    const housing = document.getElementById("housingStatus");
-    const rentField = document.getElementById("rentField");
-    const mortgageField = document.getElementById("mortgageField");
-
-    function syncHousing() {
-      const v = housing.value;
-      rentField.classList.toggle("hidden", v !== "renting");
-      mortgageField.classList.toggle("hidden", v !== "owner_mortgage");
-    }
-    housing.addEventListener("change", syncHousing);
-    syncHousing();
-
-    document.getElementById("searchForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const form = e.target;
-      const payload = Object.fromEntries(new FormData(form));
-
-      // TEMP: just log for now
-      console.log("Search payload:", payload);
-
-      alert("Search submitted (results page coming next)");
-    });
-  </script>
-</body>
-</html>
+        <option value="1100
