@@ -1,3 +1,5 @@
+import { convertToScores } from "../lib/convertToScores.v1.js";
+
 export async function onRequest(context) {
   const { request, env } = context;
 
