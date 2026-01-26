@@ -69,9 +69,27 @@
     .muted {
       color: #888;
     }
+    
   </style>
 </head>
 <body>
+/* ===== Admin focus mode ===== */
+
+/* Hide non-selected rows when a row is focused */
+tr.dimmed {
+  display: none;
+}
+
+/* Optional: visually emphasize the focused row */
+tr.focused {
+  background-color: #fffbe6; /* soft highlight */
+}
+
+/* Make the evidence panel feel intentional */
+#evidencePanel {
+  padding-top: 8px;
+  border-top: 2px solid #eee;
+}
 
 <h1>Admin – Car Loan Submissions</h1>
 
