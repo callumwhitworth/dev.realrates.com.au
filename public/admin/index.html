@@ -179,15 +179,6 @@
     });
   }
 
-
-
-  // Open the PDF stream directly in a new tab
-  const url =
-    `/api/admin/evidence?key=${encodeURIComponent(objectKey)}`;
-
-  window.open(url, "_blank", "noopener");
-}
-
 async function showEvidenceForRow(objectKey) {
   const panel = document.getElementById("evidencePanel");
   const frame = document.getElementById("evidenceFrame");
