@@ -179,12 +179,7 @@
     });
   }
 
-function openEvidence(objectKey) {
-  const key = getKey();
-  if (!key) {
-    alert("Admin key not set");
-    return;
-  }
+
 
   // Open the PDF stream directly in a new tab
   const url =
@@ -338,12 +333,6 @@ function wireRowSelection() {
   document.getElementById("setKeyBtn").onclick = setKey;
   document.getElementById("refreshBtn").onclick = loadPending;
   document.getElementById("approveBtn").onclick = approveSelected;
-
-document.getElementById("selectAll").addEventListener("change", e => {
-  document.querySelectorAll(".rowCheck").forEach(cb => cb.checked = e.target.checked);
-  showEvidenceForRow(null); // clear embedded PDF
-});
-
 
   (async () => {
     try {
