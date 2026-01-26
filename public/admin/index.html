@@ -165,16 +165,19 @@
     });
   }
 
-  async function openEvidence(objectKey) {
-    try {
-      const res = await apiFetch(`/api/admin/evidence?key=${encodeURIComponent(objectKey)}`);
-      if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
-      window.open(data.url, "_blank", "noopener");
-    } catch (err) {
-      alert("Failed to open PDF");
-      console.error(err);
-    }
+function openEvidence(objectKey) {
+  const key = getKey();
+  if (!key) {
+    alert("Admin key not set");
+    return;
+  }
+
+  // Open the PDF stream directly in a new tab
+  const url =
+    `/api/admin/evidence?key=${encodeURIComponent(objectKey)}`;
+
+  window.open(url, "_blank", "noopener");
+}
   }
 
   async function loadPending() {
