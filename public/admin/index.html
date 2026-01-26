@@ -278,31 +278,37 @@ tr.innerHTML = `
 `;
 
 
-      tbody.appendChild(tr);
+       tbody.appendChild(tr);
     }
 
-    document.querySelectorAll(".evidenceLink").forEach(a => {
-      a.addEventListener("click", e => {
-        e.preventDefault();
-        openEvidence(e.target.dataset.key);
-      });
-    });
+    // IMPORTANT: wire checkbox → PDF preview AFTER rows exist
+    wireRowSelection();
 
     setStatus(`Loaded ${data.rows?.length || 0} pending rows`);
   }
+
   
 function wireRowSelection() {
-  document.querySelectorAll(".rowCheck").forEach(cb => {
-    cb.addEventListener("change", () => {
+  const checkboxes = document.querySelectorAll(".rowCheck");
 
-      // single-select behaviour
-      document.querySelectorAll(".rowCheck").forEach(other => {
+  checkboxes.forEach(cb => {
+    // remove any existing handler to avoid stacking listeners
+    cb.onchange = null;
+
+    cb.onchange = () => {
+      // enforce single-select
+      checkboxes.forEach(other => {
         if (other !== cb) other.checked = false;
       });
 
-      const evidenceKey = cb.checked ? cb.dataset.evidence : null;
-      showEvidenceForRow(evidenceKey || null);
-    });
+      // show / hide evidence
+      const evidenceKey =
+        cb.checked && cb.dataset.evidence
+          ? cb.dataset.evidence
+          : null;
+
+      showEvidenceForRow(evidenceKey);
+    };
   });
 }
 
@@ -333,9 +339,11 @@ function wireRowSelection() {
   document.getElementById("refreshBtn").onclick = loadPending;
   document.getElementById("approveBtn").onclick = approveSelected;
 
-  document.getElementById("selectAll").addEventListener("change", e => {
-    document.querySelectorAll(".rowCheck").forEach(cb => cb.checked = e.target.checked);
-  });
+document.getElementById("selectAll").addEventListener("change", e => {
+  document.querySelectorAll(".rowCheck").forEach(cb => cb.checked = e.target.checked);
+  showEvidenceForRow(null); // clear embedded PDF
+});
+
 
   (async () => {
     try {
