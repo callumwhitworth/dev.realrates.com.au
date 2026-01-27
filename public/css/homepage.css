@@ -30,7 +30,9 @@
   max-width: 1265px; /* ~15% wider */
   margin: 18px auto 16px; /* reduced bottom gap */
   padding: 0 12px;
-  min-height: 50vh;
+ .tile-section {
+  min-height: 32vh;
+}
 
   display: flex;
   align-items: stretch;
