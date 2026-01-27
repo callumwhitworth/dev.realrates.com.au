@@ -1,25 +1,48 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="robots" content="noindex,nofollow" />
-  <title>Submit Car Loan – Dev RealRates</title>
-  <style>
-    body { font-family: system-ui, Arial; margin: 24px; max-width: 720px; }
-    h1 { margin: 0 0 12px; }
-    form { display: flex; flex-direction: column; gap: 14px; }
-    label { display: flex; flex-direction: column; gap: 6px; }
-    select, input { padding: 10px; font-size: 14px; }
-    .row { display:flex; gap:12px; }
-    .row > label { flex:1; }
-    .muted { color:#666; font-size: 12px; }
-    button { padding: 12px; font-size: 14px; cursor: pointer; }
-    .hidden { display: none; }
-  </style>
+  <title>Submit Car Loan – RealRates</title>
+
+  <!-- Base styles -->
+  <link rel="stylesheet" href="/css/base.css">
 </head>
-<body>
-  <h1>Submit a Car Loan</h1>
-  <div class="muted">All fields are dropdowns except lender and rate. Keep it simple.</div>
+
+<body class="page-contribute">
+
+  <!-- NAV BAR -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <img
+          src="/css/RealRatesLogo.png"
+          alt="RealRates logo"
+          class="nav-logo"
+        />
+        <div class="nav-brand">
+          <div class="nav-brand-title">
+            RealRates<span>.com.au</span>
+          </div>
+          <div class="nav-brand-tagline">
+            Because “from 6.99%” means nothing
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-right">
+        <a href="/">Home</a>
+        <a href="/logout">Sign Out</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <div class="page-container">
+
+      <h1>Submit a Car Loan</h1>
+      <p class="muted">All fields are dropdowns except lender and rate. Keep it simple. </div>
 
   <form id="loanForm">
     <!-- Loan outcome -->
