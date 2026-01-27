@@ -35,6 +35,12 @@ body {
 
 main { padding: 48px 0; }
 
+/* Shared content column (forms, headings, etc.) */
+.form-column {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
 /* ==============================
    NAV BAR
 ============================== */
@@ -121,16 +127,13 @@ form {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-width: 900px;
 }
-
 
 label {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  max-width: 900px;
-  margin-left: 0;
+  gap: 6px;
+  font-size: 14px;
 }
 
 input,
