@@ -39,7 +39,7 @@ main { padding: 48px 0; }
 .form-column {
   max-width: 900px;
   margin: 0 auto;
-  transform: translateX(-80px);
+  transform: translateX(-100px);
 }
 
 
