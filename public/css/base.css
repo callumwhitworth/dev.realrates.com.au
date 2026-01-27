@@ -124,11 +124,13 @@ form {
   max-width: 900px;
 }
 
+
 label {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  font-size: 14px;
+  gap: 16px;
+  max-width: 900px;
+  margin-left: 0;
 }
 
 input,
