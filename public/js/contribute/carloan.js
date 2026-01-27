@@ -3,8 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("loanForm");
   if (!form) return;
 
-  // rest of the file
-});
 
 document.addEventListener("DOMContentLoaded", () => {
   // Guard: only run on contribute car loan page
@@ -111,3 +109,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+  });
