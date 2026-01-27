@@ -178,10 +178,10 @@ button {
 
 label.consent {
   display: flex;
+  flex-direction: row;     /* override column */
   align-items: flex-start;
   gap: 10px;
   font-size: 13px;
-  max-width: 100%;
 }
 
 label.consent input {
@@ -191,6 +191,7 @@ label.consent input {
 label.consent span {
   line-height: 1.4;
 }
+
 
 
 /* ==============================
