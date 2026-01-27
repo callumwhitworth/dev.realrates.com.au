@@ -278,14 +278,28 @@
       </select>
     </label>
     <label>
-  Evidence PDF (optional)
-  <input name="evidencePdf" type="file" accept="application/pdf" />
-</label>
+      
+      Evidence PDF (required)
+      <input name="evidencePdf" type="file" accept="application/pdf" required />
+    </label>
+
+    <div class="contribution-notes">
+      <div class="tldr-title">TL;DR</div>
+      <ul>
+        <li>We view the PDF to make sure the rate is real - and delete the original document.</li>
+        <li>It sits on Cloudflare briefly while we process it.</li>
+        <li>Your contribution goes live without your personal details attached.</li>
+      </ul>
+    </div>
+
+    <label class="consent">
+      <input type="checkbox" name="consent" required />
+      I agree to the <a href="/terms" target="_blank">Terms &amp; Conditions</a> and I’ve read the
+      <a href="/privacy" target="_blank">Privacy Policy</a>.
+    </label>
+
     <button type="submit">Submit</button>
   </form>
-
-    </div>
-  </main>
 
   <!-- FOOTER -->
   <footer class="footer">
