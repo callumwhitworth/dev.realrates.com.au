@@ -162,6 +162,37 @@ button {
 
 .hidden { display: none; }
 
+.contribution-notes {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.contribution-notes ul {
+  padding-left: 18px;
+  margin: 12px 0 20px;
+}
+
+.contribution-notes li {
+  margin-bottom: 10px; /* increased spacing */
+}
+
+label.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  max-width: 100%;
+}
+
+label.consent input {
+  margin-top: 3px;
+}
+
+label.consent span {
+  line-height: 1.4;
+}
+
+
 /* ==============================
    FOOTER
 ============================== */
