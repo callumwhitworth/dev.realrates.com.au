@@ -1,49 +1,43 @@
 /* ==============================
-   Root variables
+   ROOT VARIABLES
 ============================== */
-
 :root {
   --text-primary: #5A2D0C;
   --bg-page: #f7f7f7;
   --bg-white: #ffffff;
-
   --max-width: 1200px;
-
   --nav-height: 167px;
-
   --font-serif: "Playfair Display", Georgia, serif;
   --font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* ==============================
-   Global reset & base
+   GLOBAL RESET
 ============================== */
-
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
   font-family: var(--font-sans);
   color: var(--text-primary);
   background: var(--bg-page);
+  line-height: 1.4;
 }
 
 /* ==============================
-   Layout container
+   LAYOUT
 ============================== */
-
 .page-container {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 24px;
 }
 
+main { padding: 48px 0; }
+
 /* ==============================
    NAV BAR
 ============================== */
-
 .navbar {
   height: var(--nav-height);
   background: var(--bg-page);
@@ -54,33 +48,33 @@ body {
   margin: 0 auto;
   padding: 0 24px;
   height: 100%;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-/* Left side (logo + title) */
-
 .nav-left {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
 }
 
 .nav-logo {
-  height: var(--nav-height);
+  height: calc(var(--nav-height) * 0.7);
   width: auto;
 }
 
 .nav-brand {
-  line-height: 1.1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .nav-brand-title {
   font-family: var(--font-serif);
   font-weight: 700;
-  font-size: calc(var(--nav-height) * 0.66);
+  font-size: calc(var(--nav-height) * 0.46);
+  line-height: 1;
 }
 
 .nav-brand-title span {
@@ -91,11 +85,9 @@ body {
 .nav-brand-tagline {
   font-family: var(--font-serif);
   font-weight: 400;
-  font-size: 40%;
-  margin-top: 6px;
+  font-size: 80%;
+  margin-top: 8px;
 }
-
-/* Right side nav */
 
 .nav-right a {
   margin-left: 32px;
@@ -104,22 +96,67 @@ body {
   font-weight: 500;
 }
 
-.nav-right a:hover {
-  text-decoration: underline;
+.nav-right a:hover { text-decoration: underline; }
+
+/* ==============================
+   TYPOGRAPHY
+============================== */
+h1 {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+p { margin: 0 0 16px; }
+
+.muted {
+  font-size: 13px;
+  opacity: 0.8;
 }
 
 /* ==============================
-   MAIN CONTENT
+   FORMS
 ============================== */
-
-main {
-  padding: 48px 0;
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 900px;
 }
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+
+input,
+select {
+  padding: 10px;
+  font-size: 14px;
+  font-family: var(--font-sans);
+}
+
+button {
+  padding: 12px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+}
+
+.row > label { flex: 1; }
+
+.hidden { display: none; }
 
 /* ==============================
    FOOTER
 ============================== */
-
 .footer {
   background: var(--bg-page);
   padding: 32px 0;
@@ -133,9 +170,7 @@ main {
   text-align: center;
 }
 
-.footer-links {
-  margin-bottom: 8px;
-}
+.footer-links { margin-bottom: 8px; }
 
 .footer-links a {
   margin: 0 12px;
@@ -143,10 +178,6 @@ main {
   color: var(--text-primary);
 }
 
-.footer-links a:hover {
-  text-decoration: underline;
-}
+.footer-links a:hover { text-decoration: underline; }
 
-.footer-legal {
-  opacity: 0.85;
-}
+.footer-legal { opacity: 0.85; }
