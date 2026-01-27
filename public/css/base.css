@@ -62,11 +62,11 @@ main { padding: 48px 0; }
 .nav-left {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 25px;
 }
 
 .nav-logo {
-  height: calc(var(--nav-height) * 0.7);
+  height: calc(var(--nav-height) * 0.5);
   width: auto;
 }
 
@@ -91,7 +91,7 @@ main { padding: 48px 0; }
 .nav-brand-tagline {
   font-family: var(--font-serif);
   font-weight: 400;
-  font-size: 80%;
+  font-size: 100%;
   margin-top: 8px;
 }
 
