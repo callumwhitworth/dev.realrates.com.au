@@ -268,37 +268,38 @@
     </div>
 
     <label>
-      Vehicle age (band)
-      <select name="vehicleAgeBand" required>
-        <option value="new">New</option>
-        <option value="1-3">1–3 years</option>
-        <option value="4-7">4–7 years</option>
-        <option value="8-12">8–12 years</option>
-        <option value="13_plus">13+ years</option>
-      </select>
-    </label>
-    <label>
-      
-      Evidence PDF (required)
-      <input name="evidencePdf" type="file" accept="application/pdf" required />
-    </label>
+  Vehicle age (band)
+  <select name="vehicleAgeBand" required>
+    <option value="new">New</option>
+    <option value="1-3">1–3 years</option>
+    <option value="4-7">4–7 years</option>
+    <option value="8-12">8–12 years</option>
+    <option value="13_plus">13+ years</option>
+  </select>
+</label>
 
-    <div class="contribution-notes">
-      <div class="tldr-title">TL;DR</div>
-      <ul>
-        <li>We view the PDF to make sure the rate is real - and delete the original document.</li>
-        <li>It sits on Cloudflare briefly while we process it.</li>
-        <li>Your contribution goes live without your personal details attached.</li>
-      </ul>
-    </div>
+<label>
+  Evidence PDF (required)
+  <input name="evidencePdf" type="file" accept="application/pdf" required />
+</label>
 
-    <label class="consent">
-      <input type="checkbox" name="consent" required />
-      I agree to the <a href="/terms" target="_blank">Terms &amp; Conditions</a> and I’ve read the
-      <a href="/privacy" target="_blank">Privacy Policy</a>.
-    </label>
+<div class="contribution-notes">
+  <ul>
+    <li>We view the PDF to make sure the rate is real — and delete the original document.</li>
+    <li>It sits on Cloudflare briefly while we process it.</li>
+    <li>Your contribution goes live without your personal details attached.</li>
+  </ul>
+</div>
 
-    <button type="submit">Submit</button>
+<label class="consent">
+  <input type="checkbox" name="consent" required />
+  <span>
+    I agree to the <a href="/terms" target="_blank">Terms &amp; Conditions</a>
+    and I’ve read the <a href="/privacy" target="_blank">Privacy Policy</a>.
+  </span>
+</label>
+
+<button type="submit">Submit</button>
   </form>
 
   <!-- FOOTER -->
