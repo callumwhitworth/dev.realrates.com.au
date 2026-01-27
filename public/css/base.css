@@ -1,0 +1,152 @@
+/* ==============================
+   Root variables
+============================== */
+
+:root {
+  --text-primary: #5A2D0C;
+  --bg-page: #f7f7f7;
+  --bg-white: #ffffff;
+
+  --max-width: 1200px;
+
+  --nav-height: 167px;
+
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ==============================
+   Global reset & base
+============================== */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background: var(--bg-page);
+}
+
+/* ==============================
+   Layout container
+============================== */
+
+.page-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ==============================
+   NAV BAR
+============================== */
+
+.navbar {
+  height: var(--nav-height);
+  background: var(--bg-page);
+}
+
+.navbar-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Left side (logo + title) */
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-logo {
+  height: var(--nav-height);
+  width: auto;
+}
+
+.nav-brand {
+  line-height: 1.1;
+}
+
+.nav-brand-title {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: calc(var(--nav-height) * 0.66);
+}
+
+.nav-brand-title span {
+  font-size: 40%;
+  font-weight: 400;
+}
+
+.nav-brand-tagline {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 40%;
+  margin-top: 6px;
+}
+
+/* Right side nav */
+
+.nav-right a {
+  margin-left: 32px;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.nav-right a:hover {
+  text-decoration: underline;
+}
+
+/* ==============================
+   MAIN CONTENT
+============================== */
+
+main {
+  padding: 48px 0;
+}
+
+/* ==============================
+   FOOTER
+============================== */
+
+.footer {
+  background: var(--bg-page);
+  padding: 32px 0;
+  font-size: 13px;
+}
+
+.footer-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.footer-links {
+  margin-bottom: 8px;
+}
+
+.footer-links a {
+  margin: 0 12px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.footer-legal {
+  opacity: 0.85;
+}
