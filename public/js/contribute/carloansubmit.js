@@ -1,3 +1,8 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("loanForm");
+  if (!form) return;
+
+
 export async function onRequest(context) {
   const { request, env } = context;
 
@@ -50,3 +55,4 @@ export async function onRequest(context) {
     return new Response("Server error: " + (err?.message || String(err)), { status: 500 });
   }
 }
+  });
