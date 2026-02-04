@@ -11,314 +11,301 @@
 
 <body class="page-contribute">
 
-  <!-- NAV BAR -->
-  <nav class="navbar">
-    <div class="navbar-inner">
-      <div class="nav-left">
-        <img
-          src="/css/RealRatesLogo.png"
-          alt="RealRates logo"
-          class="nav-logo"
-        />
-        <div class="nav-brand">
-          <div class="nav-brand-title">
-            RealRates<span>.com.au</span>
-          </div>
-          <div class="nav-brand-tagline">
-            Because “from 6.99%” means nothing
-          </div>
-        </div>
-      </div>
-
-      <div class="nav-right">
-        <a href="/">Home</a>
-        <a href="/logout">Sign Out</a>
-      </div>
-    </div>
-  </nav>
+  <!-- NAV (injected from /nav.html) -->
+  <div id="site-nav"></div>
 
   <!-- MAIN CONTENT -->
   <main>
- <div class="form-column">
-  <h1>Submit a Car Loan</h1>
-  <p class="muted">All fields are dropdowns except lender and rate. Keep it simple.</p>
+    <div class="form-column">
+      <h1>Submit a Car Loan</h1>
+      <p class="muted">All fields are dropdowns except lender and rate. Keep it simple.</p>
 
-  <form id="loanForm">
+      <form id="loanForm">
 
+        <!-- Loan outcome -->
+        <label>
+          Lender (as shown on offer)
+          <input name="lender" required maxlength="60" placeholder="e.g. ANZ, Westpac" />
+        </label>
 
-    <!-- Loan outcome -->
-    <label>
-      Lender (as shown on offer)
-      <input name="lender" required maxlength="60" placeholder="e.g. ANZ, Westpac" />
-    </label>
+        <label>
+          Interest rate (%) offered
+          <input name="interestRate" type="number" step="0.01" required min="0.01" max="49.99" placeholder="e.g. 12.50" />
+        </label>
 
-    <label>
-      Interest rate (%) offered
-      <input name="interestRate" type="number" step="0.01" required min="0.01" max="49.99" placeholder="e.g. 12.50" />
-    </label>
+        <!-- Key drivers -->
+        <div class="row">
+          <label>
+            State
+            <select name="state" required>
+              <option value="VIC">VIC</option>
+              <option value="NSW">NSW</option>
+              <option value="QLD">QLD</option>
+              <option value="SA">SA</option>
+              <option value="WA">WA</option>
+              <option value="TAS">TAS</option>
+              <option value="ACT">ACT</option>
+              <option value="NT">NT</option>
+            </select>
+          </label>
 
-    <!-- Key drivers -->
-    <div class="row">
-      <label>
-        State
-        <select name="state" required>
-          <option value="VIC">VIC</option>
-          <option value="NSW">NSW</option>
-          <option value="QLD">QLD</option>
-          <option value="SA">SA</option>
-          <option value="WA">WA</option>
-          <option value="TAS">TAS</option>
-          <option value="ACT">ACT</option>
-          <option value="NT">NT</option>
-        </select>
-      </label>
+          <label>
+            Application channel
+            <select name="applicationChannel" required>
+              <option value="online">Online</option>
+              <option value="branch">Branch</option>
+              <option value="broker">Broker</option>
+              <option value="dealer">Dealer</option>
+            </select>
+          </label>
+        </div>
 
-      <label>
-        Application channel
-        <select name="applicationChannel" required>
-          <option value="online">Online</option>
-          <option value="branch">Branch</option>
-          <option value="broker">Broker</option>
-          <option value="dealer">Dealer</option>
-        </select>
-      </label>
+        <label>
+          Income (gross, excl super) – band
+          <select name="incomeBand" required>
+            <option value="lt_40000">&lt; $40k</option>
+            <option value="40000-49999">$40k–49,999</option>
+            <option value="50000-59999">$50k–59,999</option>
+            <option value="60000-69999">$60k–69,999</option>
+            <option value="70000-79999">$70k–79,999</option>
+            <option value="80000-89999">$80k–89,999</option>
+            <option value="90000-99999">$90k–99,999</option>
+            <option value="100000-109999">$100k–109,999</option>
+            <option value="110000-119999">$110k–119,999</option>
+            <option value="120000-129999">$120k–129,999</option>
+            <option value="130000-149999">$130k–149,999</option>
+            <option value="150000-179999">$150k–179,999</option>
+            <option value="180000-219999">$180k–219,999</option>
+            <option value="220000_plus">$220k+</option>
+          </select>
+        </label>
+
+        <label>
+          Employment status / stability
+          <select name="employmentStatus" required>
+            <option value="ft_1y_plus">Full-time (1+ year)</option>
+            <option value="ft_under_1y">Full-time (&lt; 1 year)</option>
+            <option value="pt">Part-time</option>
+            <option value="casual">Casual</option>
+            <option value="self_employed_1y_plus">Self-employed (1+ year)</option>
+            <option value="self_employed_under_1y">Self-employed (&lt; 1 year)</option>
+            <option value="unemployed">Unemployed</option>
+          </select>
+        </label>
+
+        <label>
+          Age band
+          <select name="ageBand" required>
+            <option value="18-24">18–24</option>
+            <option value="25-34">25–34</option>
+            <option value="35-44">35–44</option>
+            <option value="45-54">45–54</option>
+            <option value="55-64">55–64</option>
+            <option value="65_plus">65+</option>
+          </select>
+        </label>
+
+        <label>
+          Housing status
+          <select name="housingStatus" id="housingStatus" required>
+            <option value="owner_mortgage">Owner (mortgage)</option>
+            <option value="owner_outright">Owner (outright)</option>
+            <option value="renting">Renting</option>
+            <option value="living_with_family">Living with family</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+
+        <label id="rentField" class="hidden">
+          Monthly rent (band)
+          <select name="rentPaymentBand">
+            <option value="lt_1000">&lt; $1,000</option>
+            <option value="1000-1499">$1,000–1,499</option>
+            <option value="1500-1999">$1,500–1,999</option>
+            <option value="2000-2499">$2,000–2,499</option>
+            <option value="2500-2999">$2,500–2,999</option>
+            <option value="3000-3999">$3,000–3,999</option>
+            <option value="4000_plus">$4,000+</option>
+          </select>
+        </label>
+
+        <label id="mortgageField" class="hidden">
+          Monthly mortgage repayment (band)
+          <select name="mortgagePaymentBand">
+            <option value="lt_1000">&lt; $1,000</option>
+            <option value="1000-1499">$1,000–1,499</option>
+            <option value="1500-1999">$1,500–1,999</option>
+            <option value="2000-2499">$2,000–2,499</option>
+            <option value="2500-2999">$2,500–2,999</option>
+            <option value="3000-3999">$3,000–3,999</option>
+            <option value="4000_plus">$4,000+</option>
+          </select>
+        </label>
+
+        <label>
+          Dependents
+          <select name="dependents" required>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5_plus">5+</option>
+          </select>
+        </label>
+
+        <label>
+          Existing debt obligations (monthly repayments)
+          <select name="monthlyDebtRepaymentsBand" required>
+            <option value="0">$0</option>
+            <option value="1-199">$1–199</option>
+            <option value="200-499">$200–499</option>
+            <option value="500-999">$500–999</option>
+            <option value="1000-1499">$1,000–1,499</option>
+            <option value="1500-2499">$1,500–2,499</option>
+            <option value="2500_plus">$2,500+</option>
+          </select>
+        </label>
+
+        <label>
+          Savings / liquid assets
+          <select name="liquidAssetsBand" required>
+            <option value="lt_1000">&lt; $1,000</option>
+            <option value="1000-4999">$1,000–4,999</option>
+            <option value="5000-9999">$5,000–9,999</option>
+            <option value="10000-19999">$10,000–19,999</option>
+            <option value="20000-49999">$20,000–49,999</option>
+            <option value="50000-99999">$50,000–99,999</option>
+            <option value="100000_plus">$100,000+</option>
+          </select>
+        </label>
+
+        <!-- Loan features -->
+        <label>
+          Loan amount (band)
+          <select name="loanAmountBand" required>
+            <option value="lt_5000">&lt; $5,000</option>
+            <option value="5000-9999">$5,000–9,999</option>
+            <option value="10000-14999">$10,000–14,999</option>
+            <option value="15000-19999">$15,000–19,999</option>
+            <option value="20000-29999">$20,000–29,999</option>
+            <option value="30000-39999">$30,000–39,999</option>
+            <option value="40000-49999">$40,000–49,999</option>
+            <option value="50000_plus">$50,000+</option>
+          </select>
+        </label>
+
+        <label>
+          Loan purpose
+          <select name="loanPurpose" required>
+            <option value="car_new">Car – new</option>
+            <option value="car_used">Car – used</option>
+            <option value="personal_debt_consolidation">Debt consolidation</option>
+            <option value="personal_wedding">Wedding</option>
+            <option value="personal_medical">Medical</option>
+            <option value="personal_travel">Travel</option>
+            <option value="personal_home_improvement">Home improvement</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+
+        <label>
+          Loan term (months)
+          <select name="loanTermMonths" required>
+            <option value="12">12</option>
+            <option value="24">24</option>
+            <option value="36">36</option>
+            <option value="48">48</option>
+            <option value="60">60</option>
+            <option value="72">72</option>
+            <option value="84">84</option>
+          </select>
+        </label>
+
+        <div class="row">
+          <label>
+            Guarantor
+            <select name="guarantor" required>
+              <option value="none">None</option>
+              <option value="yes">Yes</option>
+            </select>
+          </label>
+
+          <label>
+            Deposit size (%)
+            <select name="depositPercentBand" required>
+              <option value="0">0%</option>
+              <option value="1-9">1–9%</option>
+              <option value="10-19">10–19%</option>
+              <option value="20-29">20–29%</option>
+              <option value="30_plus">30%+</option>
+            </select>
+          </label>
+        </div>
+
+        <label>
+          Vehicle age (band)
+          <select name="vehicleAgeBand" required>
+            <option value="new">New</option>
+            <option value="1-3">1–3 years</option>
+            <option value="4-7">4–7 years</option>
+            <option value="8-12">8–12 years</option>
+            <option value="13_plus">13+ years</option>
+          </select>
+        </label>
+
+        <label>
+          Evidence PDF (required)
+          <input name="evidencePdf" type="file" accept="application/pdf" required />
+        </label>
+
+        <div class="contribution-notes">
+          <ul>
+            <li>We view the PDF to make sure the rate is real — and delete the original document.</li>
+            <li>It sits on Cloudflare briefly while we process it.</li>
+            <li>Your contribution goes live without your personal details attached.</li>
+          </ul>
+        </div>
+
+        <label class="consent">
+          <input type="checkbox" name="consent" required />
+          <span>
+            I agree to the <a href="/terms" target="_blank">Terms &amp; Conditions</a>
+            and I’ve read the <a href="/privacy" target="_blank">Privacy Policy</a>.
+          </span>
+        </label>
+
+        <button type="submit">Submit</button>
+      </form>
     </div>
+  </main>
 
-    <label>
-      Income (gross, excl super) – band
-      <select name="incomeBand" required>
-        <option value="lt_40000">&lt; $40k</option>
-        <option value="40000-49999">$40k–49,999</option>
-        <option value="50000-59999">$50k–59,999</option>
-        <option value="60000-69999">$60k–69,999</option>
-        <option value="70000-79999">$70k–79,999</option>
-        <option value="80000-89999">$80k–89,999</option>
-        <option value="90000-99999">$90k–99,999</option>
-        <option value="100000-109999">$100k–109,999</option>
-        <option value="110000-119999">$110k–119,999</option>
-        <option value="120000-129999">$120k–129,999</option>
-        <option value="130000-149999">$130k–149,999</option>
-        <option value="150000-179999">$150k–179,999</option>
-        <option value="180000-219999">$180k–219,999</option>
-        <option value="220000_plus">$220k+</option>
-      </select>
-    </label>
+  <!-- FOOTER (injected from /footer.html) -->
+  <div id="site-footer"></div>
 
-    <label>
-      Employment status / stability
-      <select name="employmentStatus" required>
-        <option value="ft_1y_plus">Full-time (1+ year)</option>
-        <option value="ft_under_1y">Full-time (&lt; 1 year)</option>
-        <option value="pt">Part-time</option>
-        <option value="casual">Casual</option>
-        <option value="self_employed_1y_plus">Self-employed (1+ year)</option>
-        <option value="self_employed_under_1y">Self-employed (&lt; 1 year)</option>
-        <option value="unemployed">Unemployed</option>
-      </select>
-    </label>
+  <!-- PARTIAL INJECTION -->
+  <script>
+    (async function loadPartials() {
+      const inject = async (id, url) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        try {
+          const res = await fetch(url, { cache: "no-cache" });
+          if (!res.ok) throw new Error(url + " -> " + res.status);
+          el.innerHTML = await res.text();
+        } catch (e) {
+          console.warn("Partial load failed:", e);
+        }
+      };
 
-    <label>
-      Age band
-      <select name="ageBand" required>
-        <option value="18-24">18–24</option>
-        <option value="25-34">25–34</option>
-        <option value="35-44">35–44</option>
-        <option value="45-54">45–54</option>
-        <option value="55-64">55–64</option>
-        <option value="65_plus">65+</option>
-      </select>
-    </label>
-
-    <label>
-      Housing status
-      <select name="housingStatus" id="housingStatus" required>
-        <option value="owner_mortgage">Owner (mortgage)</option>
-        <option value="owner_outright">Owner (outright)</option>
-        <option value="renting">Renting</option>
-        <option value="living_with_family">Living with family</option>
-        <option value="other">Other</option>
-      </select>
-    </label>
-
-    <label id="rentField" class="hidden">
-      Monthly rent (band)
-      <select name="rentPaymentBand">
-        <option value="lt_1000">&lt; $1,000</option>
-        <option value="1000-1499">$1,000–1,499</option>
-        <option value="1500-1999">$1,500–1,999</option>
-        <option value="2000-2499">$2,000–2,499</option>
-        <option value="2500-2999">$2,500–2,999</option>
-        <option value="3000-3999">$3,000–3,999</option>
-        <option value="4000_plus">$4,000+</option>
-      </select>
-    </label>
-
-    <label id="mortgageField" class="hidden">
-      Monthly mortgage repayment (band)
-      <select name="mortgagePaymentBand">
-        <option value="lt_1000">&lt; $1,000</option>
-        <option value="1000-1499">$1,000–1,499</option>
-        <option value="1500-1999">$1,500–1,999</option>
-        <option value="2000-2499">$2,000–2,499</option>
-        <option value="2500-2999">$2,500–2,999</option>
-        <option value="3000-3999">$3,000–3,999</option>
-        <option value="4000_plus">$4,000+</option>
-      </select>
-    </label>
-
-    <label>
-      Dependents
-      <select name="dependents" required>
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5_plus">5+</option>
-      </select>
-    </label>
-
-    <label>
-      Existing debt obligations (monthly repayments)
-      <select name="monthlyDebtRepaymentsBand" required>
-        <option value="0">$0</option>
-        <option value="1-199">$1–199</option>
-        <option value="200-499">$200–499</option>
-        <option value="500-999">$500–999</option>
-        <option value="1000-1499">$1,000–1,499</option>
-        <option value="1500-2499">$1,500–2,499</option>
-        <option value="2500_plus">$2,500+</option>
-      </select>
-    </label>
-
-    <label>
-      Savings / liquid assets
-      <select name="liquidAssetsBand" required>
-        <option value="lt_1000">&lt; $1,000</option>
-        <option value="1000-4999">$1,000–4,999</option>
-        <option value="5000-9999">$5,000–9,999</option>
-        <option value="10000-19999">$10,000–19,999</option>
-        <option value="20000-49999">$20,000–49,999</option>
-        <option value="50000-99999">$50,000–99,999</option>
-        <option value="100000_plus">$100,000+</option>
-      </select>
-    </label>
-
-    <!-- Loan features -->
-    <label>
-      Loan amount (band)
-      <select name="loanAmountBand" required>
-        <option value="lt_5000">&lt; $5,000</option>
-        <option value="5000-9999">$5,000–9,999</option>
-        <option value="10000-14999">$10,000–14,999</option>
-        <option value="15000-19999">$15,000–19,999</option>
-        <option value="20000-29999">$20,000–29,999</option>
-        <option value="30000-39999">$30,000–39,999</option>
-        <option value="40000-49999">$40,000–49,999</option>
-        <option value="50000_plus">$50,000+</option>
-      </select>
-    </label>
-
-    <label>
-      Loan purpose
-      <select name="loanPurpose" required>
-        <option value="car_new">Car – new</option>
-        <option value="car_used">Car – used</option>
-        <option value="personal_debt_consolidation">Debt consolidation</option>
-        <option value="personal_wedding">Wedding</option>
-        <option value="personal_medical">Medical</option>
-        <option value="personal_travel">Travel</option>
-        <option value="personal_home_improvement">Home improvement</option>
-        <option value="other">Other</option>
-      </select>
-    </label>
-
-    <label>
-      Loan term (months)
-      <select name="loanTermMonths" required>
-        <option value="12">12</option>
-        <option value="24">24</option>
-        <option value="36">36</option>
-        <option value="48">48</option>
-        <option value="60">60</option>
-        <option value="72">72</option>
-        <option value="84">84</option>
-      </select>
-    </label>
-
-    <div class="row">
-      <label>
-        Guarantor
-        <select name="guarantor" required>
-          <option value="none">None</option>
-          <option value="yes">Yes</option>
-        </select>
-      </label>
-
-      <label>
-        Deposit size (%)
-        <select name="depositPercentBand" required>
-          <option value="0">0%</option>
-          <option value="1-9">1–9%</option>
-          <option value="10-19">10–19%</option>
-          <option value="20-29">20–29%</option>
-          <option value="30_plus">30%+</option>
-        </select>
-      </label>
-    </div>
-
-    <label>
-  Vehicle age (band)
-  <select name="vehicleAgeBand" required>
-    <option value="new">New</option>
-    <option value="1-3">1–3 years</option>
-    <option value="4-7">4–7 years</option>
-    <option value="8-12">8–12 years</option>
-    <option value="13_plus">13+ years</option>
-  </select>
-</label>
-
-<label>
-  Evidence PDF (required)
-  <input name="evidencePdf" type="file" accept="application/pdf" required />
-</label>
-
-<div class="contribution-notes">
-  <ul>
-    <li>We view the PDF to make sure the rate is real — and delete the original document.</li>
-    <li>It sits on Cloudflare briefly while we process it.</li>
-    <li>Your contribution goes live without your personal details attached.</li>
-  </ul>
-</div>
-
-<label class="consent">
-  <input type="checkbox" name="consent" required />
-  <span>
-    I agree to the <a href="/terms" target="_blank">Terms &amp; Conditions</a>
-    and I’ve read the <a href="/privacy" target="_blank">Privacy Policy</a>.
-  </span>
-</label>
-
-<button type="submit">Submit</button>
-  </form>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-links">
-        <a href="/about">About Us</a>
-        <a href="/contact">Contact Us</a>
-        <a href="/privacy">Privacy Policy</a>
-      </div>
-      <div class="footer-legal">
-        RealRates.com.au ABN 67 951 208 922
-      </div>
-    </div>
-  </footer>
+      await inject("site-nav", "/nav.html");
+      await inject("site-footer", "/footer.html");
+    })();
+  </script>
 
   <!-- PAGE SCRIPT -->
-<script src="/js/contribute/carloan.js" defer></script>
-<script src="/js/contribute/carloansubmit.js" defer></script>
+  <script src="/js/contribute/carloan.js" defer></script>
+  <script src="/js/contribute/carloansubmit.js" defer></script>
 
 </body>
 </html>
