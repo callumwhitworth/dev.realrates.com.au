@@ -11,27 +11,8 @@
 
 <body class="page-search">
 
-  <!-- NAV BAR -->
-  <nav class="navbar">
-    <div class="navbar-inner">
-      <div class="nav-left">
-        <img src="/css/RealRatesLogo.png" alt="RealRates logo" class="nav-logo" />
-        <div class="nav-brand">
-          <div class="nav-brand-title">
-            RealRates<span>.com.au</span>
-          </div>
-          <div class="nav-brand-tagline">
-            Because “from 6.99%” means nothing
-          </div>
-        </div>
-      </div>
-
-      <div class="nav-right">
-        <a href="/">Home</a>
-        <a href="/logout">Sign Out</a>
-      </div>
-    </div>
-  </nav>
+  <!-- NAV (injected from /nav.html) -->
+  <div id="site-nav"></div>
 
   <!-- MAIN CONTENT -->
   <main>
@@ -235,19 +216,29 @@
     </div>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-links">
-        <a href="/about">About Us</a>
-        <a href="/contact">Contact Us</a>
-        <a href="/privacy">Privacy Policy</a>
-      </div>
-      <div class="footer-legal">
-        RealRates.com.au ABN 67 951 208 922
-      </div>
-    </div>
-  </footer>
+  <!-- FOOTER (injected from /footer.html) -->
+  <div id="site-footer"></div>
+
+  <!-- PARTIAL INJECTION -->
+  <script>
+    (async function loadPartials() {
+      const inject = async (id, url) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        try {
+          const res = await fetch(url, { cache: "no-cache" });
+          if (!res.ok) throw new Error(url + " -> " + res.status);
+          el.innerHTML = await res.text();
+        } catch (e) {
+          // Fail "quietly": page still works even if nav/footer fails to load
+          console.warn("Partial load failed:", e);
+        }
+      };
+
+      await inject("site-nav", "/nav.html");
+      await inject("site-footer", "/footer.html");
+    })();
+  </script>
 
   <!-- PAGE SCRIPT -->
   <script src="/js/search/carloan.js" defer></script>
